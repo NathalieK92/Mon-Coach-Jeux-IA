@@ -1,9 +1,11 @@
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plateau de Backgammon</title>
+
     <style>
         :root {
             --board-bg: #4a2c11;
@@ -11,141 +13,174 @@
             --point-light: #f3e5ab;
             --point-dark: #8b0000;
             --bar-color: #2b1a0a;
-            --checker-light: #ffffff;
-            --checker-dark: #111111;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
+            margin: 0;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background-color: #222;
-            margin: 0;
-            font-family: sans-serif;
+            background: #222;
+            font-family: Arial, sans-serif;
+            padding: 15px;
         }
 
-        /* Cadre du plateau */
         .backgammon-board {
             display: flex;
-            width: 800px;
-            height: 500px;
-            background-color: var(--board-bg);
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            box-sizing: border-box;
+            width: min(900px, 100%);
+            aspect-ratio: 8 / 5;
+            padding: 2%;
+            gap: 0;
+            background: var(--board-bg);
+            border: 5px solid #76502b;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
         }
 
-        /* Les deux moitiés du plateau (interne / externe) */
         .board-half {
+            flex: 1;
+            min-width: 0;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            width: 45%;
-            background-color: var(--felt-bg);
+            background: var(--felt-bg);
+            overflow: hidden;
+        }
+
+        .points-row {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            width: 100%;
+            height: 48%;
             position: relative;
         }
 
-        /* La barre centrale */
+        .point {
+            position: relative;
+            min-width: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* Triangles du haut : pointe vers le bas */
+        .points-row.top .point {
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+        }
+
+        /* Triangles du bas : pointe vers le haut */
+        .points-row.bottom .point {
+            clip-path: polygon(50% 0, 0 100%, 100% 100%);
+        }
+
+        /* Alternance des couleurs */
+        .point.light {
+            background-color: var(--point-light);
+        }
+
+        .point.dark {
+            background-color: var(--point-dark);
+        }
+
+        /* Barre centrale */
         .bar {
-            width: 10%;
-            background-color: var(--bar-color);
+            flex: 0 0 10%;
+            background: var(--bar-color);
+            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.8);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+            gap: 8px;
         }
 
-        /* Rangées de flèches (haut et bas) */
-        .points-row {
-            display: flex;
-            width: 100%;
-            height: 42%;
-        }
-
-        .points-row.bottom {
-            flex-direction: row;
-        }
-
-        /* Style individuel d'une flèche (point) */
-        .point {
-            flex: 1;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            clip-path: polygon(0% 0%, 100% 0%, 50% 100%); /* Crée le triangle */
-        }
-
-        /* Inversion du triangle pour la rangée du bas */
-        .bottom .point {
-            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-            justify-content: flex-end;
-        }
-
-        /* Couleurs alternées des flèches */
-        .point.light { background-color: var(--point-light); }
-        .point.dark { background-color: var(--point-dark); }
-
-        /* Conteneur de jetons superposés sur les flèches */
-        .checkers-container {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            pointer-events: none; /* Permet de cliquer à travers si besoin */
-        }
-
-        .bottom .checkers-container {
-            flex-direction: column-reverse;
-        }
-
-        /* Style des jetons (pions) */
+        /* Pions d'exemple */
         .checker {
+            position: relative;
+            z-index: 1;
             width: 80%;
-            padding-top: 80%; /* Rend le pion parfaitement circulaire */
+            aspect-ratio: 1;
+            flex: 0 0 auto;
             border-radius: 50%;
-            margin: 2px 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
-            box-sizing: border-box;
+            margin: 1px auto;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
         }
 
         .checker.light {
-            background-color: var(--checker-light);
+            background: #fff;
             border: 2px solid #ccc;
         }
 
         .checker.dark {
-            background-color: var(--checker-dark);
-            border: 2px solid #333;
+            background: #111;
+            border: 2px solid #444;
         }
-        
-        /* Exemple de pions sur la barre centrale */
+
+        .checkers-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 2px;
+            pointer-events: none;
+        }
+
+        .points-row.bottom .checkers-container {
+            flex-direction: column-reverse;
+            justify-content: flex-start;
+            padding-top: 0;
+            padding-bottom: 2px;
+        }
+
         .bar .checker {
-            width: 60%;
-            padding-top: 60%;
-            margin: 5px 0;
+            width: 65%;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 5px;
+            }
+
+            .backgammon-board {
+                border-width: 3px;
+                padding: 2%;
+            }
+
+            .checker.light,
+            .checker.dark {
+                border-width: 1px;
+            }
         }
     </style>
 </head>
+
 <body>
 
-    <div class="backgammon-board">
-        <!-- JAN EXTÉRIEUR (Gauche) -->
-        <div class="board-half">
-            <!-- Haut Gauche (Flèches 13 à 18) -->
+    <main class="backgammon-board" aria-label="Plateau de backgammon">
+
+        <!-- Partie gauche -->
+        <section class="board-half">
+
+            <!-- Triangles du haut : de gauche à droite -->
             <div class="points-row top">
-                <div class="point dark"></div>
                 <div class="point light"></div>
                 <div class="point dark"></div>
                 <div class="point light"></div>
                 <div class="point dark"></div>
                 <div class="point light"></div>
+                <div class="point dark"></div>
             </div>
-            <!-- Bas Gauche (Flèches 7 à 12) -->
+
+            <!-- Triangles du bas -->
             <div class="points-row bottom">
                 <div class="point light"></div>
                 <div class="point dark"></div>
@@ -154,21 +189,22 @@
                 <div class="point light"></div>
                 <div class="point dark"></div>
             </div>
-        </div>
 
-        <!-- LA BARRE CENTRALE -->
-        <div class="bar">
-            <!-- Exemple de pions capturés -->
+        </section>
+
+        <!-- Barre centrale -->
+        <div class="bar" aria-label="Barre centrale">
             <div class="checker light"></div>
             <div class="checker dark"></div>
         </div>
 
-        <!-- JAN INTÉRIEUR (Droite) -->
-        <div class="board-half">
-            <!-- Haut Droite (Flèches 19 à 24) -->
+        <!-- Partie droite -->
+        <section class="board-half">
+
+            <!-- Triangles du haut -->
             <div class="points-row top">
+                <div class="point light"></div>
                 <div class="point dark">
-                    <!-- Exemple avec 5 pions blancs -->
                     <div class="checkers-container">
                         <div class="checker light"></div>
                         <div class="checker light"></div>
@@ -181,9 +217,9 @@
                 <div class="point dark"></div>
                 <div class="point light"></div>
                 <div class="point dark"></div>
-                <div class="point light"></div>
             </div>
-            <!-- Bas Droite (Flèches 1 à 6) -->
+
+            <!-- Triangles du bas -->
             <div class="points-row bottom">
                 <div class="point light"></div>
                 <div class="point dark"></div>
@@ -191,17 +227,19 @@
                 <div class="point dark"></div>
                 <div class="point light"></div>
                 <div class="point dark">
-                    <!-- Exemple avec 2 pions noirs -->
                     <div class="checkers-container">
                         <div class="checker dark"></div>
                         <div class="checker dark"></div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+
+        </section>
+
+    </main>
 
 </body>
 </html>
+```
 
 
