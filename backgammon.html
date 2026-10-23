@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apprendre le Backgammon - Mon Coach de Jeux IA</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f7f3eb;
+      color: #29251f;
+      line-height: 1.6;
+    }
+
+    header {
+      background: #243b32;
+      color: white;
+      text-align: center;
+      padding: 28px 16px;
+    }
+
+    header h1 { margin: 0; font-size: 28px; }
+
+    header p { margin-bottom: 0; }
+
+    main {
+      width: min(850px, 92%);
+      margin: 28px auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 14px #0000000d;
+    }
+
+    h2 { color: #243b32; }
+
+    .step {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin: 18px 0;
+    }
+
+    .number {
+      background: #b45b35;
+      color: white;
+      border-radius: 50%;
+      min-width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      font-weight: bold;
+    }
+
+    .step p { margin: 0; }
+
+    .board {
+      background: #6b3929;
+      color: white;
+      border-radius: 12px;
+      text-align: center;
+      padding: 24px 12px;
+      font-size: 42px;
+    }
+
+    .note {
+      background: #f5ead9;
+      border-left: 4px solid #b45b35;
+      padding: 12px;
+      border-radius: 5px;
+    }
+
+    .button {
+      display: inline-block;
+      background: #b45b35;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 9px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .center { text-align: center; }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: #625e57;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🎲 Apprendre le Backgammon</h1>
+  <p>Ton coach pour apprendre à jouer, pas à pas !</p>
+</header>
+
+<main>
+  <section class="card">
+    <h2>Bienvenue, futur joueur !</h2>
+    <p>Tu n'as jamais joué au backgammon ? Pas de problème !
+    Nous allons découvrir ensemble ce jeu de plateau qui mélange
+    hasard, réflexion et stratégie.</p>
+    <div class="board">🎲 ⚪ ⚫ 🎲</div>
+    <p class="center"><strong>Notre objectif :</strong> apprendre en s'amusant.</p>
+  </section>
+
+  <section class="card">
+    <h2>1. Quel est le but du jeu ?</h2>
+    <p>Chaque joueur possède 15 pions. Tu dois les déplacer autour
+    du plateau selon les résultats des dés, puis les ramener dans
+    ton dernier quart de plateau.</p>
+    <p>Quand tes 15 pions sont dans cette zone finale, tu peux
+    commencer à les sortir du plateau.</p>
+    <p><strong>Le premier joueur qui sort ses 15 pions gagne !</strong></p>
+  </section>
+
+  <section class="card">
+    <h2>2. Comment jouer avec les dés ?</h2>
+
+    <div class="step">
+      <div class="number">1</div>
+      <p><strong>Lance les deux dés.</strong><br>
+      Exemple : tu obtiens 3 et 5.</p>
+    </div>
+
+    <div class="step">
+      <div class="number">2</div>
+      <p><strong>Déplace tes pions.</strong><br>
+      Tu peux déplacer un pion de 3 cases et un autre de 5,
+      ou le même pion de 3 puis de 5 si chaque déplacement est légal.</p>
+    </div>
+
+    <div class="step">
+      <div class="number">3</div>
+      <p><strong>Respecte les cases occupées.</strong><br>
+      Tu ne peux pas arriver sur une case occupée par au moins
+      deux pions adverses.</p>
+    </div>
+
+    <div class="note">
+      <strong>À retenir :</strong> si tu fais un double, par exemple
+      deux 4, tu joues quatre déplacements de 4 cases, lorsque c'est possible.
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>3. Que se passe-t-il si tu touches un pion adverse ?</h2>
+    <p>Si une case contient un seul pion adverse, tu peux parfois
+    y arriver et le frapper. Son pion est alors placé sur la barre
+    au milieu du plateau.</p>
+    <p>Ton adversaire devra le faire rentrer avant de pouvoir
+    déplacer ses autres pions.</p>
+  </section>
+
+  <section class="card">
+    <h2>4. Comment gagner ?</h2>
+    <p>Lorsque tes 15 pions sont dans ton dernier quart de plateau,
+    tu peux les sortir en utilisant les dés. Le premier joueur qui
+    sort tous ses pions remporte la partie.</p>
+  </section>
+
+  <section class="card center">
+    <h2>Prêt à progresser ?</h2>
+    <p>Cette page présente les premières règles. La prochaine étape
+    sera de construire un plateau interactif pour t'entraîner.</p>
+    <a class="button" href="index.html">Retour à l'accueil</a>
+  </section>
+</main>
+
+<footer>
+  Mon Coach de Jeux IA · Apprendre à son rythme
+</footer>
+
+</body>
+</html>
