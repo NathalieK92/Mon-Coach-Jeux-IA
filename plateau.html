@@ -1,140 +1,308 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Plateau de backgammon</title>
+<title>Mon Coach de Jeux IA - Backgammon</title>
 <style>
-  :root {
-    --frame: #4a3426;      /* bois du cadre */
-    --frame-dark: #35241a;
-    --field: #b86f45;      /* fond marron du plateau */
-    --cream: #f6efe2;      /* triangles crème */
-    --brown: #2b1d17;      /* triangles marron foncé */
-    --tray: #7a5238;
-  }
-
-  * { box-sizing: border-box; }
-
-  body {
-    margin: 0;
-    min-height: 100vh;
-    display: grid;
-    place-items: center;
-    background: #ece7df;
-    padding: 20px;
-  }
-
-  /* Cadre extérieur */
-  .board {
-    display: flex;
-    width: min(96vw, 1000px);
-    aspect-ratio: 1.45 / 1;
-    padding: 2.2%;
-    background: linear-gradient(135deg, var(--frame), var(--frame-dark));
-    border-radius: 6px;
-    box-shadow: 0 18px 40px rgba(0, 0, 0, .35);
-    gap: 1.2%;
-  }
-
-  /* Une moitié du plateau */
-  .half {
-    flex: 1;
-    display: flex;
-    gap: 3%;
-    padding: 2.5%;
-    background: var(--field);
-    background-image:
-      radial-gradient(rgba(255,255,255,.07) 1px, transparent 1px),
-      radial-gradient(rgba(0,0,0,.08) 1px, transparent 1px);
-    background-size: 5px 5px, 7px 7px;
-    border-radius: 3px;
-    box-shadow: inset 0 0 0 4px var(--frame-dark), inset 0 0 18px rgba(0,0,0,.45);
-    position: relative;
-  }
-
-  /* Petit rail de stockage des pions, côté extérieur */
-  .tray {
-    width: 7%;
-    background: var(--tray);
-    border-radius: 2px;
-    box-shadow: inset 0 0 8px rgba(0,0,0,.5);
-  }
-
-  .quarters {
-    flex: 1;
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    gap: 6%;
-  }
-
-  /* Une rangée de 6 triangles */
-  .row {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 0;
-  }
-
-  .point {
-    background: var(--cream);
-  }
-  .row.top .point {
-    clip-path: polygon(0 0, 100% 0, 50% 100%);
-    margin: 0 1.5%;
-  }
-  .row.bottom .point {
-    clip-path: polygon(50% 0, 100% 100%, 0 100%);
-    margin: 0 1.5%;
-  }
-
-  /* Alternance crème / marron */
-  .row.top .point:nth-child(even)    { background: var(--brown); }
-  .row.bottom .point:nth-child(odd)  { background: var(--brown); }
-  .row.bottom .point:nth-child(even) { background: var(--cream); }
-
-  /* La barre centrale (charnière) */
-  .bar {
-    width: 1.2%;
-    background: var(--frame-dark);
-    border-radius: 1px;
-  }
-
-  /* Moitié droite : le rail est à droite */
-  .half.right { flex-direction: row-reverse; }
+:root {
+  --frame:#4a3426; --dark:#35241a; --field:#b86f45;
+  --cream:#f6efe2; --brown:#2b1d17; --gold:#ffd54a;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;padding:18px;background:#ece7df;color:#35241a;
+  font-family:system-ui,Arial,sans-serif;text-align:center
+}
+h1{font-size:clamp(22px,4vw,34px);margin:5px 0}
+#status{font-weight:700;min-height:28px;margin:12px}
+#help{font-size:14px;min-height:24px;margin:8px}
+.board{
+  width:min(98vw,1000px);margin:12px auto;padding:12px;
+  display:flex;gap:8px;aspect-ratio:1.5/1;
+  background:linear-gradient(135deg,var(--frame),var(--dark));
+  border:4px solid var(--dark);border-radius:10px;
+  box-shadow:0 12px 28px #0004
+}
+.half{flex:1;min-width:0;display:flex;gap:5px;padding:7px;background:var(--field)}
+.quarters{flex:1;min-width:0;display:grid;grid-template-rows:1fr 1fr;gap:8px}
+.row{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));min-height:0}
+.point{position:relative;min-width:0;display:flex;flex-direction:column;align-items:center;cursor:pointer}
+.row.bottom .point{flex-direction:column-reverse}
+.tri{position:absolute;inset:0 1px;background:var(--cream);pointer-events:none}
+.row.top .tri{clip-path:polygon(0 0,100% 0,50% 100%)}
+.row.bottom .tri{clip-path:polygon(50% 0,100% 100%,0 100%)}
+.row.top .point:nth-child(even) .tri,
+.row.bottom .point:nth-child(odd) .tri{background:var(--brown)}
+.point.legal .tri{filter:brightness(1.35)}
+.point.selected .tri{filter:brightness(1.5)}
+.point.selected{outline:3px solid var(--gold);outline-offset:-3px}
+.checker{
+  z-index:2;position:relative;width:85%;max-width:45px;aspect-ratio:1;
+  flex-shrink:0;border-radius:50%;margin-bottom:-8%;
+  border:2px solid #0005;box-shadow:0 2px 3px #0008;
+  cursor:pointer;pointer-events:none
+}
+.row.bottom .checker{margin-bottom:0;margin-top:-8%}
+.checker.white{background:radial-gradient(circle at 32% 25%,#fff,#e1d2b5)}
+.checker.black{background:radial-gradient(circle at 32% 25%,#786050,#1b110c)}
+.num{position:absolute;z-index:3;font-size:clamp(8px,1.2vw,12px);font-weight:700;color:#fff;text-shadow:0 1px 3px #000;pointer-events:none}
+.row.top .num{top:2px}.row.bottom .num{bottom:2px}
+.bar{
+  width:5%;min-width:14px;background:var(--dark);border-radius:4px;
+  display:flex;flex-direction:column;align-items:center;justify-content:space-around;
+  padding:5px 0;gap:5px
+}
+.bar .checker{width:80%;margin:0}
+.tray{
+  width:8%;min-width:17px;background:#795136;border-radius:3px;
+  display:flex;flex-direction:column;align-items:center;justify-content:space-around;
+  color:#fff;font-size:11px;font-weight:bold;overflow:hidden
+}
+.controls{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px;margin:14px auto}
+button{
+  border:0;border-radius:7px;padding:11px 15px;background:var(--frame);
+  color:white;font-size:15px;cursor:pointer
+}
+button:hover{background:var(--dark)}
+button:disabled{opacity:.4;cursor:not-allowed}
+.die{
+  width:42px;height:42px;display:grid;place-items:center;background:white;
+  border-radius:8px;font-size:25px;font-weight:bold;color:#222;
+  box-shadow:0 2px 5px #0003
+}
+.panel{max-width:700px;margin:12px auto;padding:12px;background:#fff9;border-radius:8px}
+#moves{font-size:14px;line-height:1.8}
+small{display:block;margin-top:12px;color:#66594d}
+@media(max-width:560px){
+ body{padding:5px}
+ .board{padding:5px;gap:3px;border-width:2px}
+ .half{padding:3px;gap:2px}
+ .quarters{gap:4px}
+ .bar{min-width:9px;width:4%}
+ .tray{min-width:12px;width:6%;font-size:8px}
+ .checker{border-width:1px}
+ button{padding:9px;font-size:13px}
+}
 </style>
 </head>
 <body>
+<h1>🎲 Mon plateau de backgammon</h1>
+<div id="status">Blancs : à vous de jouer.</div>
+<div id="help">Lancez les dés pour commencer.</div>
 
-  <div class="board" id="board">
-    <div class="half left">
-      <div class="tray"></div>
-      <div class="quarters">
-        <div class="row top"></div>
-        <div class="row bottom"></div>
-      </div>
-    </div>
-
-    <div class="bar"></div>
-
-    <div class="half right">
-      <div class="tray"></div>
-      <div class="quarters">
-        <div class="row top"></div>
-        <div class="row bottom"></div>
-      </div>
+<div class="board">
+  <div class="half">
+    <div class="tray"><span>BLANC</span><span id="offW">0</span></div>
+    <div class="quarters">
+      <div class="row top" data-points="13,14,15,16,17,18"></div>
+      <div class="row bottom" data-points="12,11,10,9,8,7"></div>
     </div>
   </div>
+  <div class="bar" id="bar"></div>
+  <div class="half">
+    <div class="quarters">
+      <div class="row top" data-points="19,20,21,22,23,24"></div>
+      <div class="row bottom" data-points="6,5,4,3,2,1"></div>
+    </div>
+    <div class="tray"><span>NOIRS</span><span id="offB">0</span></div>
+  </div>
+</div>
 
-  <script>
-    // Génère les 6 triangles de chaque rangée (24 au total)
-    document.querySelectorAll('.row').forEach(function (row) {
-      for (var i = 0; i < 6; i++) {
-        var p = document.createElement('div');
-        p.className = 'point';
-        row.appendChild(p);
-      }
-    });
-  </script>
+<div class="controls">
+  <button id="roll">🎲 Lancer les dés</button>
+  <div class="die" id="d1">–</div><div class="die" id="d2">–</div>
+  <button id="pass" disabled>Terminer le tour</button>
+  <button id="reset">Nouvelle partie</button>
+</div>
+<div class="panel">
+  <strong>Coups possibles</strong>
+  <div id="moves">Aucun coup joué.</div>
+</div>
+<small>Jeu local à deux joueurs — les blancs avancent des cases 24 vers 1, les noirs des cases 1 vers 24.</small>
 
+<script>
+(() => {
+const START = {
+  24:['white',2], 13:['white',5], 8:['white',3], 6:['white',5],
+  1:['black',2], 12:['black',5], 17:['black',3], 19:['black',5]
+};
+let state={}, bar={white:0,black:0}, off={white:0,black:0};
+let turn='white', dice=[], selected=null, rolled=false, over=false, history=[];
+
+const $=id=>document.getElementById(id);
+const opponent=c=>c==='white'?'black':'white';
+const label=c=>c==='white'?'Blancs':'Noirs';
+const pointNumber=p=>Number(p.dataset.n);
+
+document.querySelectorAll('.row').forEach(row=>{
+ row.dataset.points.split(',').forEach(n=>{
+  const p=document.createElement('div');
+  p.className='point';p.dataset.n=n;
+  p.innerHTML='<div class="tri"></div><span class="num">'+n+'</span>';
+  p.addEventListener('click',()=>clickPoint(Number(n)));
+  row.appendChild(p);
+ });
+});
+$('bar').innerHTML='<div id="barW"></div><div style="color:#fff">BARRE</div><div id="barB"></div>';
+
+function save(){
+ history.push(JSON.stringify({state,bar,off,turn,dice,rolled,over}));
+ if(history.length>100)history.shift();
+}
+function restore(s){
+ state=s.state;bar=s.bar;off=s.off;turn=s.turn;dice=s.dice;
+ rolled=s.rolled;over=s.over;selected=null;render();
+}
+function reset(){
+ state={};
+ for(const n in START)state[n]={color:START[n][0],count:START[n][1]};
+ bar={white:0,black:0};off={white:0,black:0};
+ turn='white';dice=[];selected=null;rolled=false;over=false;history=[];
+ $('d1').textContent='–';$('d2').textContent='–';
+ $('roll').disabled=false;$('pass').disabled=true;
+ render();
+}
+function snapshot(){return {state:JSON.parse(JSON.stringify(state)),bar:{...bar},off:{...off},turn,dice:[...dice],rolled,over}}
+function restoreSnapshot(s){state=s.state;bar=s.bar;off=s.off;turn=s.turn;dice=s.dice;rolled=s.rolled;over=s.over;selected=null;render()}
+function pipDistance(from,to,color){
+ return color==='white'?from-to:to-from;
+}
+function allHome(color){
+ if(bar[color]>0)return false;
+ for(let n=1;n<=24;n++){
+  if(state[n]?.color===color){
+   if(color==='white'&&n>6)return false;
+   if(color==='black'&&n<19)return false;
+  }
+ }
+ return true;
+}
+function legalTargets(from){
+ if(!rolled||over)return [];
+ if(bar[turn]>0&&from!==0)return [];
+ const result=[];
+ for(let die of [...new Set(dice)]){
+  let to;
+  if(from===0)to=turn==='white'?25-die:die;
+  else to=turn==='white'?from-die:from+die;
+  if(to>=1&&to<=24){
+   const dest=state[to];
+   if(!dest||dest.color===turn||dest.count===1)result.push({to,die});
+  }else if(from!==0&&allHome(turn)){
+   const exact=turn==='white'?from===die:25-from===die;
+   const overshoot=turn==='white'?from<die:25-from<die;
+   let blocked=false;
+   if(overshoot){
+    for(let n=turn==='white'?from+1:19;n<=(turn==='white'?6:from-1);n++){
+     if(state[n]?.color===turn){blocked=true;break}
+    }
+   }
+   if(exact|| (overshoot&&!blocked))result.push({to:25,die});
+  }
+ }
+ return result;
+}
+function availableSources(){
+ if(!rolled||over)return [];
+ const sources=[];
+ if(bar[turn]>0){
+  if(legalTargets(0).length)sources.push(0);
+  return sources;
+ }
+ for(let n=1;n<=24;n++)if(state[n]?.color===turn&&legalTargets(n).length)sources.push(n);
+ return sources;
+}
+function canUseDice(){
+ if(!dice.length)return false;
+ return availableSources().length>0;
+}
+function applyMove(from,to,die){
+ if(from===0)bar[turn]--;
+ else{
+  state[from].count--;
+  if(state[from].count===0)delete state[from];
+ }
+ if(to===25){off[turn]++;return}
+ if(state[to]?.color===opponent(turn)){
+  delete state[to];bar[opponent(turn)]++;
+ }
+ if(!state[to])state[to]={color:turn,count:0};
+ state[to].count++;
+}
+function clickPoint(n){
+ if(over||!rolled)return;
+ if(selected===null){
+  if(availableSources().includes(n)){selected=n;render()}
+  else if(n===0&&bar[turn]>0){selected=0;render()}
+  return;
+ }
+ if(availableSources().includes(n)){selected=n;render();return}
+ const opts=legalTargets(selected);
+ const opt=opts.find(x=>x.to===n);
+ if(!opt)return;
+ save();applyMove(selected,n,opt.die);
+ const i=dice.indexOf(opt.die);if(i>=0)dice.splice(i,1);
+ selected=null;
+ if(off[turn]===15){over=true;render();return}
+ if(!canUseDice()){finishTurn(false);return}
+ render();
+}
+function render(){
+ document.querySelectorAll('.point').forEach(p=>{
+  const n=pointNumber(p),s=state[n];
+  p.querySelectorAll('.checker').forEach(c=>c.remove());
+  p.classList.toggle('selected',selected===n);
+  p.classList.toggle('legal',selected!==null&&legalTargets(selected).some(x=>x.to===n));
+  if(s)for(let i=0;i<s.count;i++){
+   const c=document.createElement('div');c.className='checker '+s.color;p.appendChild(c);
+  }
+ });
+ $('barW').innerHTML='';$('barB').innerHTML='';
+ for(const c of ['white','black']){
+  const target=$(c==='white'?'barW':'barB');
+  target.style.color='white';target.style.fontSize='12px';
+  target.textContent=bar[c]?'● '+bar[c]:'';
+ }
+ $('offW').textContent=off.white;$('offB').textContent=off.black;
+ $('status').textContent=over?label(turn)+' gagnent ! Partie terminée.':label(turn)+' : '+(rolled?'à vous de jouer.':'lancez les dés.');
+ $('help').textContent=over?'Cliquez sur « Nouvelle partie » pour recommencer.':
+  !rolled?'Lancez les dés. Cliquez ensuite sur un pion, puis sur sa destination.':
+  bar[turn]>0?'Vous avez des pions sur la barre : réintroduisez-les en premier.':
+  'Sélectionnez un pion puis une destination autorisée.';
+ $('roll').disabled=rolled||over;
+ $('pass').disabled=!rolled||over;
+ $('moves').textContent=rolled?(dice.length?'Dés restants : '+dice.join(', '):'Plus de dés disponibles.'):'Lancez les dés pour afficher les coups possibles.';
+}
+function finishTurn(forced){
+ if(over)return;
+ selected=null;rolled=false;dice=[];turn=opponent(turn);
+ $('d1').textContent='–';$('d2').textContent='–';
+ render();
+}
+$('roll').addEventListener('click',()=>{
+ if(rolled||over)return;
+ save();
+ const a=1+Math.floor(Math.random()*6),b=1+Math.floor(Math.random()*6);
+ $('d1').textContent=a;$('d2').textContent=b;
+ dice=a===b?[a,a,a,a]:[a,b];rolled=true;selected=null;
+ if(!canUseDice()){
+  render();$('help').textContent='Aucun coup légal. Le tour passe automatiquement.';
+  setTimeout(()=>{if(rolled&&!over&&!canUseDice())finishTurn(true)},900);
+ }else render();
+});
+$('pass').addEventListener('click',()=>{
+ if(!rolled||over)return;
+ if(canUseDice()){
+  $('help').textContent='Vous avez encore un coup légal à jouer.';
+  return;
+ }
+ save();finishTurn(false);
+});
+$('reset').addEventListener('click',reset);
+reset();
+})();
+</script>
 </body>
 </html>
