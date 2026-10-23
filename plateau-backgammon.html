@@ -1,244 +1,237 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plateau de Backgammon</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plateau de Backgammon</title>
 
-    <style>
-        :root {
-            --board-bg: #4a2c11;
-            --felt-bg: #4a2c11;
-            --point-light: #4a2c11;
-            --point-dark: #f3e5ab;
-            --bar-color: #2b1a0a;
-        }
+<style>
+:root {
+    --board-bg: #4a2c11;
+    --felt-bg: #4a2c11;
+    --cream: #f3e5ab;
+    --brown: #4a2c11;
+    --bar-color: #2b1a0a;
+}
 
-        * {
-            box-sizing: border-box;
-        }
+* {
+    box-sizing: border-box;
+}
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #222;
-            font-family: Arial, sans-serif;
-            padding: 15px;
-        }
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    background-color: #4a2c11;
+    font-family: Arial, sans-serif;
+}
 
-        .backgammon-board {
-            display: flex;
-            width: min(900px, 100%);
-            aspect-ratio: 8 / 5;
-            padding: 2%;
-            gap: 0;
-            background: var(--board-bg);
-            border: 5px solid #76502b;
-            border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-        }
+.backgammon-board {
+    display: flex;
+    width: min(900px, 100%);
+    aspect-ratio: 8 / 5;
+    padding: 2%;
+    background-color: var(--board-bg);
+    border: 5px solid #76502b;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
 
-        .board-half {
-            flex: 1;
-            min-width: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            background: var(--felt-bg);
-            overflow: hidden;
-        }
+.board-half {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: var(--felt-bg);
+    overflow: hidden;
+}
 
-        .points-row {
-            display: grid;
-            grid-template-columns: repeat(6, minmax(0, 1fr));
-            width: 100%;
-            height: 48%;
-            position: relative;
-        }
+.points-row {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    width: 100%;
+    height: 48%;
+    position: relative;
+}
 
-        .point {
-            position: relative;
-            min-width: 0;
-            height: 100%;
-            overflow: hidden;
-        }
+.point {
+    position: relative;
+    min-width: 0;
+    height: 100%;
+    overflow: hidden;
+}
 
-        /* Triangles du haut : pointe vers le bas */
-        .points-row.top .point {
-            clip-path: polygon(0 0, 100% 0, 50% 100%);
-        }
+/* Triangles du haut : pointe vers le bas */
+.points-row.top .point {
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
 
-        /* Triangles du bas : pointe vers le haut */
-        .points-row.bottom .point {
-            clip-path: polygon(50% 0, 0 100%, 100% 100%);
-        }
+/* Triangles du bas : pointe vers le haut */
+.points-row.bottom .point {
+    clip-path: polygon(50% 0, 0 100%, 100% 100%);
+}
 
-        /* Alternance des couleurs */
-        .point.light {
-            background-color: var(--point-light);
-        }
+/* COULEURS : crème et marron */
+.point.light {
+    background-color: var(--cream);
+}
 
-        .point.dark {
-            background-color: var(--point-dark);
-        }
+.point.dark {
+    background-color: var(--brown);
+}
 
-        /* Barre centrale */
-        .bar {
-            flex: 0 0 10%;
-            background: var(--bar-color);
-            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.8);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
+/* Barre centrale */
+.bar {
+    flex: 0 0 10%;
+    background-color: var(--bar-color);
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
 
-        /* Pions d'exemple */
-        .checker {
-            position: relative;
-            z-index: 1;
-            width: 80%;
-            aspect-ratio: 1;
-            flex: 0 0 auto;
-            border-radius: 50%;
-            margin: 1px auto;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-        }
+/* Pions */
+.checker {
+    position: relative;
+    z-index: 1;
+    width: 80%;
+    aspect-ratio: 1;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    margin: 1px auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
 
-        .checker.light {
-            background: #fff;
-            border: 2px solid #ccc;
-        }
+.checker.light {
+    background-color: #fff;
+    border: 2px solid #ccc;
+}
 
-        .checker.dark {
-            background: #111;
-            border: 2px solid #444;
-        }
+.checker.dark {
+    background-color: #111;
+    border: 2px solid #444;
+}
 
-        .checkers-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding-top: 2px;
-            pointer-events: none;
-        }
+.checkers-container {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 2px;
+    pointer-events: none;
+}
 
-        .points-row.bottom .checkers-container {
-            flex-direction: column-reverse;
-            justify-content: flex-start;
-            padding-top: 0;
-            padding-bottom: 2px;
-        }
+.points-row.bottom .checkers-container {
+    flex-direction: column-reverse;
+    justify-content: flex-start;
+    padding-top: 0;
+    padding-bottom: 2px;
+}
 
-        .bar .checker {
-            width: 65%;
-        }
+.bar .checker {
+    width: 65%;
+}
 
-        @media (max-width: 600px) {
-            body {
-                padding: 5px;
-            }
+@media (max-width: 600px) {
+    body {
+        padding: 5px;
+    }
 
-            .backgammon-board {
-                border-width: 3px;
-                padding: 2%;
-            }
+    .backgammon-board {
+        border-width: 3px;
+        padding: 2%;
+    }
 
-            .checker.light,
-            .checker.dark {
-                border-width: 1px;
-            }
-        }
-    </style>
+    .checker.light,
+    .checker.dark {
+        border-width: 1px;
+    }
+}
+</style>
 </head>
 
 <body>
 
-    <main class="backgammon-board" aria-label="Plateau de backgammon">
+<main class="backgammon-board" aria-label="Plateau de backgammon">
 
-        <!-- Partie gauche -->
-        <section class="board-half">
+    <!-- Partie gauche -->
+    <section class="board-half">
 
-            <!-- Triangles du haut : de gauche à droite -->
-            <div class="points-row top">
-                <div class="point light"></div>
-                <div class="point dark"></div>
-                <div class="point light"></div>
-                <div class="point dark"></div>
-                <div class="point light"></div>
-                <div class="point dark"></div>
-            </div>
-
-            <!-- Triangles du bas -->
-            <div class="points-row bottom">
-                <div class="point light"></div>
-                <div class="point dark"></div>
-                <div class="point light"></div>
-                <div class="point dark"></div>
-                <div class="point light"></div>
-                <div class="point dark"></div>
-            </div>
-
-        </section>
-
-        <!-- Barre centrale -->
-        <div class="bar" aria-label="Barre centrale">
-            <div class="checker light"></div>
-            <div class="checker dark"></div>
+        <div class="points-row top">
+            <div class="point light"></div>
+            <div class="point dark"></div>
+            <div class="point light"></div>
+            <div class="point dark"></div>
+            <div class="point light"></div>
+            <div class="point dark"></div>
         </div>
 
-        <!-- Partie droite -->
-        <section class="board-half">
+        <div class="points-row bottom">
+            <div class="point light"></div>
+            <div class="point dark"></div>
+            <div class="point light"></div>
+            <div class="point dark"></div>
+            <div class="point light"></div>
+            <div class="point dark"></div>
+        </div>
 
-            <!-- Triangles du haut -->
-            <div class="points-row top">
-                <div class="point light"></div>
-                <div class="point dark">
-                    <div class="checkers-container">
-                        <div class="checker light"></div>
-                        <div class="checker light"></div>
-                        <div class="checker light"></div>
-                        <div class="checker light"></div>
-                        <div class="checker light"></div>
-                    </div>
-                </div>
-                <div class="point light"></div>
-                <div class="point dark"></div>
-                <div class="point light"></div>
-                <div class="point dark"></div>
-            </div>
+    </section>
 
-            <!-- Triangles du bas -->
-            <div class="points-row bottom">
-                <div class="point light"></div>
-                <div class="point dark"></div>
-                <div class="point light"></div>
-                <div class="point dark"></div>
-                <div class="point light"></div>
-                <div class="point dark">
-                    <div class="checkers-container">
-                        <div class="checker dark"></div>
-                        <div class="checker dark"></div>
-                    </div>
+    <!-- Barre centrale -->
+    <div class="bar" aria-label="Barre centrale">
+        <div class="checker light"></div>
+        <div class="checker dark"></div>
+    </div>
+
+    <!-- Partie droite -->
+    <section class="board-half">
+
+        <div class="points-row top">
+            <div class="point light"></div>
+            <div class="point dark">
+                <div class="checkers-container">
+                    <div class="checker light"></div>
+                    <div class="checker light"></div>
+                    <div class="checker light"></div>
+                    <div class="checker light"></div>
+                    <div class="checker light"></div>
                 </div>
             </div>
+            <div class="point light"></div>
+            <div class="point dark"></div>
+            <div class="point light"></div>
+            <div class="point dark"></div>
+        </div>
 
-        </section>
+        <div class="points-row bottom">
+            <div class="point light"></div>
+            <div class="point dark"></div>
+            <div class="point light"></div>
+            <div class="point dark"></div>
+            <div class="point light"></div>
+            <div class="point dark">
+                <div class="checkers-container">
+                    <div class="checker dark"></div>
+                    <div class="checker dark"></div>
+                </div>
+            </div>
+        </div>
 
-    </main>
+    </section>
+
+</main>
 
 </body>
 </html>
+
+
 
 
