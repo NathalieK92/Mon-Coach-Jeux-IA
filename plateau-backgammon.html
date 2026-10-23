@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -19,12 +19,8 @@
       text-align: center;
     }
 
-    h1 {
+    h1, h2 {
       color: #5b321d;
-    }
-
-    h2 {
-      color: #663c27;
     }
 
     .plateau {
@@ -115,4 +111,54 @@
       }
     }
   </style>
-</head
+</head>
+
+<body>
+  <h1>Mon Coach de Jeux IA</h1>
+  <h2>Plateau de backgammon</h2>
+
+  <div class="plateau">
+    <div class="interieur" id="plateau"></div>
+  </div>
+
+  <p class="infos">
+    24 triangles · 4 groupes de 6 · Couleurs alternées
+  </p>
+
+  <script>
+    const plateau = document.getElementById("plateau");
+
+    for (let ligne = 0; ligne < 2; ligne++) {
+      for (let colonne = 0; colonne < 13; colonne++) {
+        if (colonne === 6) {
+          if (ligne === 0) {
+            const barre = document.createElement("div");
+            barre.className = "barre";
+            plateau.appendChild(barre);
+          }
+          continue;
+        }
+
+        const casePlateau = document.createElement("div");
+        casePlateau.className =
+          ligne === 0 ? "case haut" : "case bas";
+
+        const triangle = document.createElement("div");
+        const numeroTriangle =
+          colonne < 6 ? colonne : colonne - 1;
+
+        // Premier triangle en haut à gauche : crème.
+        // Puis brun, crème, brun, en alternance.
+        const couleurCreme =
+          (numeroTriangle + ligne) % 2 === 0;
+
+        triangle.className =
+          "triangle " + (couleurCreme ? "creme" : "brun");
+
+        casePlateau.appendChild(triangle);
+        plateau.appendChild(casePlateau);
+      }
+    }
+  </script>
+</body>
+</html>
