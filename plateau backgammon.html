@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon Coach IA - Backgammon</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #f4efe5;
+      text-align: center;
+      color: #29251f;
+    }
+
+    h1 { color: #704323; }
+
+    .plateau {
+      max-width: 700px;
+      margin: 25px auto;
+      padding: 18px;
+      background: #6b3d26;
+      border: 8px solid #3b2419;
+      border-radius: 12px;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 5px;
+    }
+
+    .case {
+      height: 190px;
+      background: #e7c99b;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 3px;
+      overflow: hidden;
+    }
+
+    .case:nth-child(even) {
+      background: #b86d43;
+    }
+
+    .triangle {
+      width: 0;
+      height: 0;
+      border-left: 17px solid transparent;
+      border-right: 17px solid transparent;
+      border-top: 85px solid #704323;
+    }
+
+    .case:nth-child(even) .triangle {
+      border-top-color: #f0d7ad;
+    }
+
+    .pion {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid #333;
+      flex-shrink: 0;
+    }
+
+    .blanc { background: #fffdf4; }
+    .noir { background: #252525; }
+
+    .des {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px;
+    }
+
+    .de {
+      width: 55px;
+      height: 55px;
+      background: white;
+      border: 2px solid #333;
+      border-radius: 10px;
+      font-size: 30px;
+      display: grid;
+      place-items: center;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #28784b;
+      color: white;
+      font-size: 17px;
+      cursor: pointer;
+    }
+
+    a { color: #704323; }
+
+    @media (max-width: 500px) {
+      body { padding: 8px; }
+      .plateau { padding: 5px; gap: 2px; border-width: 4px; }
+      .case { height: 125px; }
+      .triangle {
+        border-left-width: 9px;
+        border-right-width: 9px;
+        border-top-width: 55px;
+      }
+      .pion { width: 13px; height: 13px; }
+      .de { width: 42px; height: 42px; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎲 Mon Coach IA</h1>
+  <h2>Le plateau de Backgammon</h2>
+  <p>Découvre le plateau et prépare-toi à jouer !</p>
+
+  <div class="plateau" id="plateau"></div>
+
+  <div class="des">
+    <div class="de" id="de1">⚄</div>
+    <div class="de" id="de2">⚁</div>
+  </div>
+
+  <button onclick="lancerDes()">🎲 Lancer les dés</button>
+
+  <p id="message">Clique sur le bouton pour lancer les dés.</p>
+
+  <p><a href="backgammon.html">📘 Revoir les règles</a></p>
+  <p><a href="index.html">🏠 Retour à l'accueil</a></p>
+
+  <script>
+    const plateau = document.getElementById("plateau");
+
+    for (let i = 0; i < 24; i++) {
+      const caseJeu = document.createElement("div");
+      caseJeu.className = "case";
+
+      const triangle = document.createElement("div");
+      triangle.className = "triangle";
+      caseJeu.appendChild(triangle);
+
+      if (i === 0 || i === 11) {
+        for (let j = 0; j < 2; j++) {
+          const pion = document.createElement("div");
+          pion.className = "pion blanc";
+          caseJeu.appendChild(pion);
+        }
+      }
+
+      if (i === 5 || i === 18) {
+        for (let j = 0; j < 3; j++) {
+          const pion = document.createElement("div");
+          pion.className = "pion noir";
+          caseJeu.appendChild(pion);
+        }
+      }
+
+      plateau.appendChild(caseJeu);
+    }
+
+    function lancerDes() {
+      const d1 = Math.floor(Math.random() * 6) + 1;
+      const d2 = Math.floor(Math.random() * 6) + 1;
+      const faces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+
+      document.getElementById("de1").textContent = faces[d1 - 1];
+      document.getElementById("de2").textContent = faces[d2 - 1];
+
+      document.getElementById("message").textContent =
+        "Tu as obtenu " + d1 + " et " + d2 +
+        ". Total : " + (d1 + d2) + ".";
+    }
+  </script>
+</body>
+</html>
