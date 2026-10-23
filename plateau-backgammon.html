@@ -2,235 +2,54 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Plateau de Backgammon</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plateau de backgammon</title>
 <style>
-:root {
-    --board-bg: #4a2c11;
-    --felt-bg: #4a2c11;
-    --cream: #f3e5ab;
-    --brown: #4a2c11;
-    --bar-color: #2b1a0a;
-}
+  :root {
+    --frame: #4a3426;      /* bois du cadre */
+    --frame-dark: #35241a;
+    --field: #b86f45;      /* fond marron du plateau */
+    --cream: #f6efe2;      /* triangles crème */
+    --brown: #2b1d17;      /* triangles marron foncé */
+    --tray: #7a5238;
+  }
 
-* {
-    box-sizing: border-box;
-}
+  * { box-sizing: border-box; }
 
-body {
+  body {
     margin: 0;
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 15px;
-    background-color: #4a2c11;
-    font-family: Arial, sans-serif;
-}
-
-.backgammon-board {
-    display: flex;
-    width: min(900px, 100%);
-    aspect-ratio: 8 / 5;
-    padding: 2%;
-    background-color: var(--board-bg);
-    border: 5px solid #76502b;
-    border-radius: 10px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-}
-
-.board-half {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background-color: var(--felt-bg);
-    overflow: hidden;
-}
-
-.points-row {
     display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    width: 100%;
-    height: 48%;
-    position: relative;
-}
+    place-items: center;
+    background: #ece7df;
+    padding: 20px;
+  }
 
-.point {
-    position: relative;
-    min-width: 0;
-    height: 100%;
-    overflow: hidden;
-}
-
-/* Triangles du haut : pointe vers le bas */
-.points-row.top .point {
-    clip-path: polygon(0 0, 100% 0, 50% 100%);
-}
-
-/* Triangles du bas : pointe vers le haut */
-.points-row.bottom .point {
-    clip-path: polygon(50% 0, 0 100%, 100% 100%);
-}
-
-/* COULEURS : crème et marron */
-.point.light {
-    background-color: var(--cream);
-}
-
-.point.dark {
-    background-color: var(--brown);
-}
-
-/* Barre centrale */
-.bar {
-    flex: 0 0 10%;
-    background-color: var(--bar-color);
-    box-shadow: inset 0 0 8px rgba(0,0,0,0.8);
+  /* Cadre extérieur */
+  .board {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-}
+    width: min(96vw, 1000px);
+    aspect-ratio: 1.45 / 1;
+    padding: 2.2%;
+    background: linear-gradient(135deg, var(--frame), var(--frame-dark));
+    border-radius: 6px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, .35);
+    gap: 1.2%;
+  }
 
-/* Pions */
-.checker {
-    position: relative;
-    z-index: 1;
-    width: 80%;
-    aspect-ratio: 1;
-    flex: 0 0 auto;
-    border-radius: 50%;
-    margin: 1px auto;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
-}
-
-.checker.light {
-    background-color: #fff;
-    border: 2px solid #ccc;
-}
-
-.checker.dark {
-    background-color: #111;
-    border: 2px solid #444;
-}
-
-.checkers-container {
-    position: absolute;
-    inset: 0;
+  /* Une moitié du plateau */
+  .half {
+    flex: 1;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding-top: 2px;
-    pointer-events: none;
-}
-
-.points-row.bottom .checkers-container {
-    flex-direction: column-reverse;
-    justify-content: flex-start;
-    padding-top: 0;
-    padding-bottom: 2px;
-}
-
-.bar .checker {
-    width: 65%;
-}
-
-@media (max-width: 600px) {
-    body {
-        padding: 5px;
-    }
-
-    .backgammon-board {
-        border-width: 3px;
-        padding: 2%;
-    }
-
-    .checker.light,
-    .checker.dark {
-        border-width: 1px;
-    }
-}
-</style>
-</head>
-
-<body>
-
-<main class="backgammon-board" aria-label="Plateau de backgammon">
-
-    <!-- Partie gauche -->
-    <section class="board-half">
-
-        <div class="points-row top">
-            <div class="point light"></div>
-            <div class="point dark"></div>
-            <div class="point light"></div>
-            <div class="point dark"></div>
-            <div class="point light"></div>
-            <div class="point dark"></div>
-        </div>
-
-        <div class="points-row bottom">
-            <div class="point light"></div>
-            <div class="point dark"></div>
-            <div class="point light"></div>
-            <div class="point dark"></div>
-            <div class="point light"></div>
-            <div class="point dark"></div>
-        </div>
-
-    </section>
-
-    <!-- Barre centrale -->
-    <div class="bar" aria-label="Barre centrale">
-        <div class="checker light"></div>
-        <div class="checker dark"></div>
-    </div>
-
-    <!-- Partie droite -->
-    <section class="board-half">
-
-        <div class="points-row top">
-            <div class="point light"></div>
-            <div class="point dark">
-                <div class="checkers-container">
-                    <div class="checker light"></div>
-                    <div class="checker light"></div>
-                    <div class="checker light"></div>
-                    <div class="checker light"></div>
-                    <div class="checker light"></div>
-                </div>
-            </div>
-            <div class="point light"></div>
-            <div class="point dark"></div>
-            <div class="point light"></div>
-            <div class="point dark"></div>
-        </div>
-
-        <div class="points-row bottom">
-            <div class="point light"></div>
-            <div class="point dark"></div>
-            <div class="point light"></div>
-            <div class="point dark"></div>
-            <div class="point light"></div>
-            <div class="point dark">
-                <div class="checkers-container">
-                    <div class="checker dark"></div>
-                    <div class="checker dark"></div>
-                </div>
-            </div>
-        </div>
-
-    </section>
-
-</main>
-
-</body>
-</html>
+    gap: 3%;
+    padding: 2.5%;
+    background: var(--field);
+    background-image:
+      radial-gradient(rgba(255,255,255,.07) 1px, transparent 1px),
+      radial-gradient(rgba(0,0,0,.08) 1px, transparent 1px);
+    background-size: 5px 5px, 7px 7px;
+    border-radius: 3px;
+    box-shadow: inset 0 0 0 4px var(--frame-dark),
 
 
 
