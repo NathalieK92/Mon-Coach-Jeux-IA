@@ -6,44 +6,46 @@
 <title>Mon Coach Jeux IA — Backgammon</title>
 <style>
 :root {
-  --wood:#704321;
-  --wood-light:#b9804c;
-  --felt:#176b50;
-  --cream:#f8e8c8;
+  --wood:#633b22;
+  --wood-light:#9a683f;
+  --cream:#f3dfb9;
+  --brown:#60361f;
+  --felt:#c79a65;
+  --gold:#ffd65a;
 }
 * { box-sizing:border-box; }
 body {
   margin:0;
   padding:18px;
-  background:linear-gradient(135deg,#142b25,#263d32);
-  color:white;
+  background:linear-gradient(135deg,#352116,#69472e);
+  color:#fff5e5;
   font-family:Arial,sans-serif;
   text-align:center;
 }
 h1 { margin:4px 0 8px;font-size:clamp(24px,4vw,38px); }
-.subtitle { color:#d9e8df;margin-bottom:18px; }
-.game { max-width:1050px;margin:auto; }
+.subtitle { color:#f0d9b7;margin-bottom:18px; }
+.game { max-width:1100px;margin:auto; }
 .status {
   display:inline-block;
   padding:12px 22px;
-  border-radius:14px;
+  border-radius:12px;
   font-weight:bold;
   margin:8px auto 18px;
 }
 .status.white {
-  background:#f6e8c7;color:#352519;
+  background:#f7e8c8;color:#452a19;
   animation:flashWhite 1.3s infinite;
 }
 .status.black {
-  background:#171717;color:white;
-  border:2px solid #777;
+  background:#28180f;color:#fff0d8;
+  border:2px solid #c29b6c;
   animation:flashBlack 1.3s infinite;
 }
 @keyframes flashWhite {
-  50% { box-shadow:0 0 20px #ffe7a0; }
+  50% { box-shadow:0 0 20px #ffe3a1; }
 }
 @keyframes flashBlack {
-  50% { box-shadow:0 0 20px #aaa; }
+  50% { box-shadow:0 0 20px #c29b6c; }
 }
 .layout {
   display:grid;
@@ -54,13 +56,13 @@ h1 { margin:4px 0 8px;font-size:clamp(24px,4vw,38px); }
 .board {
   display:grid;
   grid-template-columns:repeat(12,minmax(0,1fr));
-  grid-template-rows:minmax(220px,1fr) 48px minmax(220px,1fr);
-  background:var(--wood);
-  border:9px solid var(--wood-light);
-  border-radius:10px;
+  grid-template-rows:minmax(220px,1fr) 54px minmax(220px,1fr);
+  background:#633b22;
+  border:12px solid #9a683f;
+  border-radius:8px;
   overflow:hidden;
-  box-shadow:0 12px 30px #0006;
-  min-height:520px;
+  min-height:540px;
+  box-shadow:0 12px 30px #0008,inset 0 0 0 3px #d1a875;
 }
 .point {
   position:relative;
@@ -70,35 +72,37 @@ h1 { margin:4px 0 8px;font-size:clamp(24px,4vw,38px); }
   justify-content:flex-start;
   min-width:0;
   cursor:pointer;
-  background:var(--felt);
+  background:#e2c18d;
   padding:0 1px;
 }
-.point:nth-child(odd) { background:#1d7659; }
+.point:nth-child(even) { background:#d7b27b; }
 .point.bottom { justify-content:flex-end; }
 .point.top::before,.point.bottom::after {
   content:"";
   position:absolute;
   left:4%;
   width:92%;
-  height:72%;
+  height:73%;
   pointer-events:none;
 }
 .point.top::before {
   top:0;
   clip-path:polygon(0 0,100% 0,50% 100%);
-  background:var(--tri,#c94a36);
+  background:var(--tri,#60361f);
 }
 .point.bottom::after {
   bottom:0;
   clip-path:polygon(0 100%,100% 100%,50% 0);
-  background:var(--tri,#c94a36);
+  background:var(--tri,#60361f);
 }
-.point:nth-child(4n+2) { --tri:#e8d3a7; }
+.point:nth-child(4n+2) { --tri:#f3dfb9; }
+.point:nth-child(4n+3) { --tri:#60361f; }
 .point.selected {
-  background:#c5a32b!important;
-  box-shadow:inset 0 0 0 4px #ffe66d;
+  background:#f4d34f!important;
+  box-shadow:inset 0 0 0 4px #fff0a0;
 }
-.point.dest { background:#438e5e!important; }
+.point.dest { background:#d2bc72!important; }
+.point.dest::before,.point.dest::after { opacity:.72; }
 .checkers {
   z-index:2;
   display:flex;
@@ -117,16 +121,16 @@ h1 { margin:4px 0 8px;font-size:clamp(24px,4vw,38px); }
   border-radius:50%;
   flex:0 0 auto;
   margin:-1px 0;
-  border:2px solid #d5c5a4;
-  box-shadow:0 2px 3px #0008;
+  border:2px solid #b8a17c;
+  box-shadow:0 2px 4px #0009,inset 0 2px 3px #fff7;
 }
 .checker.white {
-  background:radial-gradient(circle at 35% 30%,#fffef3,#e6d5b2 75%,#b8a27d);
-  border-color:#fff1cc;
+  background:radial-gradient(circle at 32% 25%,#fffef5,#ead9b7 65%,#b8a17c);
+  border-color:#fff0d0;
 }
 .checker.black {
-  background:radial-gradient(circle at 35% 30%,#666,#171717 75%,#050505);
-  border-color:#777;
+  background:radial-gradient(circle at 32% 25%,#78604b,#2b1a11 70%,#100a06);
+  border-color:#987657;
 }
 .checker.mini { width:min(90%,30px); }
 .count {
@@ -135,7 +139,7 @@ h1 { margin:4px 0 8px;font-size:clamp(24px,4vw,38px); }
   top:46%;
   left:50%;
   transform:translate(-50%,-50%);
-  background:#111d;
+  background:#26170fe8;
   color:white;
   font-size:12px;
   font-weight:bold;
@@ -145,32 +149,34 @@ h1 { margin:4px 0 8px;font-size:clamp(24px,4vw,38px); }
 }
 .midbar {
   grid-column:1/-1;
-  background:#9b6637;
-  border-top:4px solid #d4a16b;
-  border-bottom:4px solid #d4a16b;
+  background:linear-gradient(90deg,#5b321b,#9b6740,#5b321b);
+  border-top:3px solid #c3945e;
+  border-bottom:3px solid #c3945e;
   display:flex;
   align-items:center;
   justify-content:center;
   gap:16px;
   font-weight:bold;
+  color:#fff0d4;
 }
 .barzone {
-  min-width:55px;
+  min-width:58px;
   min-height:36px;
-  border:2px dashed #f4d29a;
+  border:2px dashed #e7c99c;
   border-radius:8px;
   padding:4px;
   cursor:pointer;
 }
 .side {
-  background:#214637;
-  border:2px solid #52745e;
+  background:linear-gradient(160deg,#805432,#492b19);
+  border:2px solid #bd9160;
   border-radius:12px;
   padding:14px 10px;
   display:flex;
   flex-direction:column;
   gap:12px;
   align-items:stretch;
+  color:#fff0da;
 }
 .side h2 { font-size:19px;margin:2px 0; }
 .dice-area {
@@ -178,68 +184,59 @@ h1 { margin:4px 0 8px;font-size:clamp(24px,4vw,38px); }
   justify-content:center;
   align-items:center;
   gap:20px;
-  min-height:130px;
+  min-height:135px;
   perspective:800px;
   overflow:visible;
   padding:10px 0 18px;
 }
 .die {
-  width:76px;
-  height:76px;
-  flex:0 0 76px;
+  width:78px;
+  height:78px;
+  flex:0 0 78px;
   display:flex;
   align-items:center;
   justify-content:center;
   border-radius:17px;
-  background:linear-gradient(145deg,#fff 0%,#f7edda 55%,#cbb995 100%);
-  color:#222;
-  border:2px solid #fff9e9;
+  background:linear-gradient(145deg,#fffdf5 0%,#f5e6c9 56%,#c7ac7d 100%);
+  color:#382519;
+  border:2px solid #fff4d9;
   font-family:"Segoe UI Symbol",Arial,sans-serif;
-  font-size:61px;
+  font-size:62px;
   line-height:1;
   box-shadow:
-    inset -6px -7px 12px #8e7b5a66,
+    inset -7px -8px 13px #8b704c66,
     inset 5px 5px 10px #ffffff,
-    0 8px 0 #9a825d,
-    0 13px 20px #0008;
+    0 8px 0 #94724a,
+    0 14px 20px #0008;
   transform-style:preserve-3d;
   position:relative;
   will-change:transform;
 }
-.die.rolling {
-  animation:diceRoll .22s infinite alternate ease-in-out;
-}
+.die.rolling { animation:diceRoll .2s infinite alternate ease-in-out; }
 @keyframes diceRoll {
-  0% {
-    transform:translate(-8px,-8px) rotateX(0deg) rotateY(0deg) rotateZ(-18deg);
-  }
-  25% {
-    transform:translate(8px,3px) rotateX(100deg) rotateY(75deg) rotateZ(35deg);
-  }
-  50% {
-    transform:translate(-5px,-12px) rotateX(200deg) rotateY(180deg) rotateZ(-25deg);
-  }
-  75% {
-    transform:translate(10px,2px) rotateX(280deg) rotateY(260deg) rotateZ(20deg);
-  }
-  100% {
-    transform:translate(0,-5px) rotateX(360deg) rotateY(360deg) rotateZ(0deg);
-  }
+  0% { transform:translate(-9px,-8px) rotateX(0deg) rotateY(0deg) rotateZ(-20deg); }
+  25% { transform:translate(9px,3px) rotateX(105deg) rotateY(75deg) rotateZ(38deg); }
+  50% { transform:translate(-5px,-12px) rotateX(205deg) rotateY(180deg) rotateZ(-28deg); }
+  75% { transform:translate(10px,3px) rotateX(285deg) rotateY(265deg) rotateZ(24deg); }
+  100% { transform:translate(0,-5px) rotateX(360deg) rotateY(360deg) rotateZ(0deg); }
 }
 button {
-  border:0;
+  border:1px solid #d3ae76;
   border-radius:9px;
   padding:11px 12px;
   font-weight:bold;
   cursor:pointer;
-  background:#f2cb65;
-  color:#33220e;
+  background:linear-gradient(#ffe6a1,#e7bc5b);
+  color:#382313;
   font-size:14px;
 }
 button:hover { filter:brightness(1.08); }
-button:disabled { opacity:.4;cursor:not-allowed; }
-button.secondary { background:#e5e8e5;color:#26382f; }
-.info { font-size:13px;line-height:1.5;color:#d8e8de; }
+button:disabled { opacity:.45;cursor:not-allowed; }
+button.secondary {
+  background:linear-gradient(#f3dfc0,#d8b88a);
+  color:#422919;
+}
+.info { font-size:13px;line-height:1.5;color:#ffebd0; }
 .moves {
   font-size:12px;
   text-align:left;
@@ -250,7 +247,7 @@ button.secondary { background:#e5e8e5;color:#26382f; }
 .rules {
   max-width:850px;
   margin:18px auto 0;
-  color:#e0e9e2;
+  color:#f5dfbf;
   font-size:13px;
   line-height:1.5;
 }
@@ -293,7 +290,7 @@ button.secondary { background:#e5e8e5;color:#26382f; }
   <div class="layout">
     <div id="board" class="board"></div>
     <aside class="side">
-      <h2>Lancer les dés</h2>
+      <h2>🎲 Lancer les dés</h2>
       <div class="dice-area">
         <div id="die1" class="die">⚀</div>
         <div id="die2" class="die">⚅</div>
@@ -311,6 +308,7 @@ button.secondary { background:#e5e8e5;color:#26382f; }
       <div id="history" class="moves">La partie commence.</div>
     </aside>
   </div>
+
   <div class="rules">
     <b>Règles :</b> clique sur un pion puis sur sa destination.
     Tu peux empiler autant de pions de ta couleur que tu le souhaites.
@@ -387,7 +385,6 @@ function bearOffLegal(from,d,c){
   return false;
 }
 function canLand(to,c){
-  if(to===0)return allInHome(c);
   if(to===null||to<1||to>24)return false;
   const p=points[to];
   return p.count===0||p.color===c||p.count===1;
@@ -441,7 +438,6 @@ function applyMove(from,to,d){
       bar[-c]++;
       points[to]={color:0,count:0};
     }
-    // Empilement des pions de sa couleur.
     if(points[to].count===0)points[to]={color:c,count:1};
     else if(points[to].color===c)points[to].count++;
     else return false;
@@ -462,7 +458,7 @@ function clickPoint(n){
     if(availableSources().includes(n)){selected=n;render()}
     return;
   }
-  // La destination est vérifiée en premier pour permettre l'empilement.
+  // Priorité à la destination : permet d'empiler ses propres pions.
   const opt=legalTargets(selected).find(x=>x.to===n);
   if(opt){
     saveSnapshot();
@@ -523,22 +519,44 @@ function rollDice(){
     }
   },70);
 }
-function makeChecker(color,mini=false){
+function drawPoint(board,n,position){
   const el=document.createElement("div");
-  el.className="checker "+(color===WHITE?"white":"black")+(mini?" mini":"");
-  return el;
+  el.className="point "+position;
+  el.title="Flèche "+n+(points[n].count?" — "+points[n].count+" pion(s)":"");
+  el.onclick=()=>clickPoint(n);
+  if(selected===n)el.classList.add("selected");
+  if(selected!==null&&legalTargets(selected).some(x=>x.to===n))el.classList.add("dest");
+  const stack=document.createElement("div");
+  stack.className="checkers";
+  const p=points[n];
+  if(p.count>0){
+    for(let i=0;i<Math.min(p.count,5);i++){
+      const checker=document.createElement("div");
+      checker.className="checker "+(p.color===WHITE?"white":"black")+(p.count>5?" mini":"");
+      stack.appendChild(checker);
+    }
+    if(p.count>5){
+      const count=document.createElement("div");
+      count.className="count";count.textContent=p.count;el.appendChild(count);
+    }
+  }
+  el.appendChild(stack);
+  board.appendChild(el);
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
 function render(){
   const board=document.getElementById("board");
   board.innerHTML="";
-  const sources=availableSources();
-  const targets=selected===null?[]:legalTargets(selected).map(x=>x.to);
-  for(let n=13;n<=24;n++)drawPoint(board,n,"top",sources,targets);
+  for(let n=13;n<=24;n++)drawPoint(board,n,"top");
+
   const mid=document.createElement("div");
   mid.className="midbar";
   mid.innerHTML='<span>BARRE</span><div class="barzone" onclick="clickPoint(0)">⚪ '+bar[WHITE]+'</div><div class="barzone" onclick="clickPoint(0)">⚫ '+bar[BLACK]+'</div>';
   board.appendChild(mid);
-  for(let n=12;n>=1;n--)drawPoint(board,n,"bottom",sources,targets);
+
+  for(let n=12;n>=1;n--)drawPoint(board,n,"bottom");
 
   const status=document.getElementById("status");
   status.className="status "+(turn===WHITE?"white":"black");
@@ -552,29 +570,6 @@ function render(){
   document.getElementById("offInfo").textContent="Blancs : "+off[WHITE]+" · Noirs : "+off[BLACK];
   document.getElementById("barInfo").textContent="Blancs : "+bar[WHITE]+" · Noirs : "+bar[BLACK];
   document.getElementById("history").innerHTML=history.slice(-12).reverse().map(escapeHtml).join("<br>");
-}
-function drawPoint(board,n,position,sources,targets){
-  const el=document.createElement("div");
-  el.className="point "+position;
-  if(selected===n)el.classList.add("selected");
-  if(targets.includes(n))el.classList.add("dest");
-  el.title="Flèche "+n+(points[n].count?" — "+points[n].count+" pion(s)":"");
-  el.onclick=()=>clickPoint(n);
-  const stack=document.createElement("div");
-  stack.className="checkers";
-  const p=points[n];
-  if(p.count>0){
-    for(let i=0;i<Math.min(p.count,5);i++)stack.appendChild(makeChecker(p.color,p.count>5));
-    if(p.count>5){
-      const count=document.createElement("div");
-      count.className="count";count.textContent=p.count;el.appendChild(count);
-    }
-  }
-  el.appendChild(stack);
-  board.appendChild(el);
-}
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
 newGame();
 </script>
