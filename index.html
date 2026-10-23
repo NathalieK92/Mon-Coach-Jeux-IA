@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon Coach de Jeux IA</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f7f3eb;
+      color: #29251f;
+    }
+
+    header {
+      background: #243b32;
+      color: white;
+      text-align: center;
+      padding: 32px 16px;
+    }
+
+    header h1 { margin: 0 0 12px; font-size: 30px; }
+    header p { margin: 0; line-height: 1.6; }
+
+    main {
+      width: min(900px, 92%);
+      margin: 32px auto;
+    }
+
+    .intro { text-align: center; margin-bottom: 28px; }
+    .intro h2 { font-size: 26px; }
+
+    .games {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .game {
+      background: white;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px #0000000d;
+      text-align: center;
+    }
+
+    .emoji { font-size: 56px; }
+    .game h3 { font-size: 22px; }
+
+    .game p { line-height: 1.6; color: #5d5a54; }
+
+    .button {
+      display: inline-block;
+      background: #b45b35;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 9px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .button:hover { background: #914529; }
+
+    .soon { background: #777; }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: #625e57;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🎲 Mon Coach de Jeux IA</h1>
+    <p>Apprends à jouer, progresse et prends plaisir !</p>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>Bienvenue dans ton école de jeux !</h2>
+      <p>Débutant ou joueur confirmé, avance à ton rythme.</p>
+    </section>
+
+    <section class="games">
+      <article class="game">
+        <div class="emoji">🎲</div>
+        <h3>Le Backgammon</h3>
+        <p>Découvre les règles, apprends à déplacer tes pions et joue tes premières parties guidées.</p>
+        <a class="button" href="backgammon.html">Apprendre à jouer</a>
+      </article>
+
+      <article class="game">
+        <div class="emoji">♟️</div>
+        <h3>Les Échecs</h3>
+        <p>Un futur espace pour apprendre les mouvements, les stratégies et les tactiques.</p>
+        <a class="button soon" href="#" onclick="return false;">Bientôt disponible</a>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    Mon Coach de Jeux IA · Apprendre en s'amusant
+  </footer>
+</body>
+</html>
