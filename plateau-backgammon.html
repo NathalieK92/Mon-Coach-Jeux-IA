@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -14,186 +14,115 @@
     body {
       margin: 0;
       padding: 20px;
+      background: #f3eadb;
       font-family: Arial, sans-serif;
-      background: #f4eadb;
-      color: #382417;
       text-align: center;
     }
 
     h1 {
-      margin-bottom: 8px;
-    }
-
-    p {
-      margin-bottom: 20px;
+      color: #5b321d;
     }
 
     .plateau {
-      width: min(100%, 900px);
-      margin: 20px auto;
-      padding: 12px;
-      background: #704323;
-      border: 5px solid #382417;
+      width: min(950px, 100%);
+      margin: 25px auto;
+      padding: 14px;
+      background: #663c27;
+      border: 5px solid #3c2419;
       border-radius: 12px;
-      display: grid;
-      grid-template-columns: 1fr 34px 1fr;
-      gap: 5px;
-      box-shadow: 0 6px 15px #0003;
+      box-shadow: 0 8px 20px #0003;
     }
 
-    .demi {
+    .interieur {
       display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      grid-template-rows: 180px 180px;
-      min-width: 0;
-      background: #e7c99b;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      grid-template-rows: 1fr 1fr;
+      gap: 0;
+      min-height: 400px;
+      background: #e9d0a7;
+      border: 3px solid #3c2419;
     }
 
     .case {
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
       position: relative;
+      display: flex;
+      justify-content: center;
       overflow: hidden;
-      background: #e7c99b;
+      background: #e9d0a7;
     }
 
-    .case:nth-child(even) {
-      background: #b86d43;
+    .case.haut {
+      align-items: flex-start;
+    }
+
+    .case.bas {
+      align-items: flex-end;
     }
 
     .triangle {
-      width: 0;
-      height: 0;
+      width: 100%;
+      height: 85%;
       flex-shrink: 0;
-      border-left: clamp(8px, 1.8vw, 25px) solid transparent;
-      border-right: clamp(8px, 1.8vw, 25px) solid transparent;
     }
 
-    /* Rangée du haut : pointe dirigée vers le bas */
     .haut .triangle {
-      border-top: 0;
-      border-bottom: 145px solid #704323;
-    }
-
-    .haut .case:nth-child(even) .triangle {
-      border-bottom-color: #f0d7ad;
-    }
-
-    /* Rangée du bas : pointe dirigée vers le haut */
-    .bas .case {
-      justify-content: flex-end;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
     }
 
     .bas .triangle {
-      order: 2;
-      border-bottom: 0;
-      border-top: 145px solid #704323;
+      clip-path: polygon(50% 0, 100% 100%, 0 100%);
     }
 
-    .bas .case:nth-child(even) .triangle {
-      border-top-color: #f0d7ad;
+    .brun {
+      background: #8b4d2e;
     }
 
-    .pions {
-      position: absolute;
-      z-index: 2;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1px;
-    }
-
-    .haut .pions {
-      top: 2px;
-    }
-
-    .bas .pions {
-      bottom: 2px;
-      flex-direction: column-reverse;
-    }
-
-    .pion {
-      width: clamp(15px, 2.2vw, 25px);
-      height: clamp(15px, 2.2vw, 25px);
-      border-radius: 50%;
-      border: 2px solid #382417;
-      box-shadow: 0 1px 2px #0006;
-    }
-
-    .blanc {
-      background: #fff8e9;
-    }
-
-    .noir {
-      background: #252525;
-      border-color: #111;
+    .creme {
+      background: #fff0cf;
     }
 
     .barre {
-      grid-column: 2;
+      grid-column: 7 / 8;
       grid-row: 1 / 3;
-      background: #382417;
-      border-left: 2px solid #9b704b;
-      border-right: 2px solid #9b704b;
+      grid-column: 7;
+      background: #4b2b1d;
+      border-left: 3px solid #3c2419;
+      border-right: 3px solid #3c2419;
+      z-index: 2;
     }
 
-    .commandes {
-      margin: 20px auto;
+    .interieur {
+      position: relative;
     }
 
-    button {
-      padding: 12px 20px;
-      border: 0;
-      border-radius: 8px;
-      background: #704323;
-      color: white;
+    .rang {
+      display: contents;
+    }
+
+    .milieu {
+      height: 0;
+    }
+
+    .infos {
+      color: #5b321d;
       font-size: 16px;
-      cursor: pointer;
     }
 
-    button:hover {
-      background: #4e2c17;
-    }
-
-    #des {
-      margin-top: 15px;
-      font-size: 28px;
-      font-weight: bold;
-      min-height: 38px;
-    }
-
-    .retour {
-      display: inline-block;
-      margin-top: 15px;
-      color: #704323;
-    }
-
-    @media (max-width: 560px) {
+    @media (max-width: 600px) {
       body {
         padding: 8px;
       }
 
       .plateau {
-        padding: 5px;
-        gap: 3px;
-        border-width: 3px;
+        padding: 6px;
       }
 
-      .demi {
-        grid-template-rows: 125px 125px;
+      .interieur {
+        min-height: 260px;
       }
 
-      .haut .triangle {
-        border-bottom-width: 100px;
-      }
-
-      .bas .triangle {
-        border-top-width: 100px;
+      .triangle {
+        height: 78%;
       }
     }
   </style>
@@ -201,105 +130,40 @@
 
 <body>
   <h1>Mon Coach de Jeux IA</h1>
-  <p>Découvre le plateau de backgammon et lance les dés !</p>
+  <h2>Plateau de backgammon</h2>
 
   <div class="plateau">
-    <div class="demi haut" id="haut-gauche"></div>
-    <div class="barre"></div>
-    <div class="demi haut" id="haut-droite"></div>
-    <div class="demi bas" id="bas-gauche"></div>
-    <div class="barre"></div>
-    <div class="demi bas" id="bas-droite"></div>
+    <div class="interieur" id="plateau"></div>
   </div>
 
-  <div class="commandes">
-    <button onclick="lancerDes()">🎲 Lancer les dés</button>
-    <div id="des">⚀ ⚀</div>
-  </div>
-
-  <a class="retour" href="index.html">← Retour à l'accueil</a>
+  <p class="infos">
+    24 triangles · 4 groupes de 6 · Couleurs alternées
+  </p>
 
   <script>
-    function creerCase(zone, numero, couleurPion = null, nombrePions = 0) {
-      const caseElement = document.createElement("div");
-      caseElement.className = "case";
-      caseElement.setAttribute("aria-label", "Case " + numero);
+    const plateau = document.getElementById("plateau");
 
-      const triangle = document.createElement("div");
-      triangle.className = "triangle";
-      caseElement.appendChild(triangle);
+    // Six triangles dans chacun des quatre groupes.
+    // La barre centrale occupe l'espace entre les deux moitiés.
+    for (let ligne = 0; ligne < 2; ligne++) {
+      for (let colonne = 0; colonne < 12; colonne++) {
+        const casePlateau = document.createElement("div");
+        casePlateau.className = ligne === 0 ? "case haut" : "case bas";
 
-      if (nombrePions > 0) {
-        const pions = document.createElement("div");
-        pions.className = "pions";
-
-        for (let i = 0; i < nombrePions; i++) {
-          const pion = document.createElement("div");
-          pion.className = "pion " + couleurPion;
-          pions.appendChild(pion);
+        // L'espace central sépare les deux groupes de six.
+        if (colonne === 6) {
+          casePlateau.style.borderLeft = "8px solid #4b2b1d";
         }
 
-        caseElement.appendChild(pions);
+        const triangle = document.createElement("div");
+        triangle.className =
+          "triangle " + ((colonne + ligne) % 2 === 0 ? "brun" : "creme");
+
+        casePlateau.appendChild(triangle);
+        plateau.appendChild(casePlateau);
       }
-
-      zone.appendChild(caseElement);
     }
-
-    function creerPlateau() {
-      const zones = [
-        document.getElementById("haut-gauche"),
-        document.getElementById("haut-droite"),
-        document.getElementById("bas-gauche"),
-        document.getElementById("bas-droite")
-      ];
-
-      zones.forEach(zone => zone.innerHTML = "");
-
-      /* Six cases dans chaque zone : 24 cases au total */
-      zones.forEach((zone, indexZone) => {
-        for (let i = 0; i < 6; i++) {
-          let couleur = null;
-          let nombre = 0;
-
-          /* Quelques pions pour illustrer le plateau */
-          if (indexZone === 0 && i === 0) {
-            couleur = "blanc";
-            nombre = 2;
-          }
-
-          if (indexZone === 1 && i === 5) {
-            couleur = "noir";
-            nombre = 3;
-          }
-
-          if (indexZone === 2 && i === 5) {
-            couleur = "blanc";
-            nombre = 3;
-          }
-
-          if (indexZone === 3 && i === 0) {
-            couleur = "noir";
-            nombre = 2;
-          }
-
-          creerCase(zone, indexZone * 6 + i + 1, couleur, nombre);
-        }
-      });
-    }
-
-    function lancerDes() {
-      const de1 = Math.floor(Math.random() * 6) + 1;
-      const de2 = Math.floor(Math.random() * 6) + 1;
-
-      const faces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
-
-      document.getElementById("des").textContent =
-        faces[de1 - 1] + " " + faces[de2 - 1] +
-        "  (" + de1 + " et " + de2 + ")";
-    }
-
-    creerPlateau();
   </script>
 </body>
 </html>
-
+```
