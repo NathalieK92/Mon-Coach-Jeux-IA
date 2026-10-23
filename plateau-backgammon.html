@@ -3,7 +3,8 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Mon Coach de Jeux IA - Backgammon</title>
 
   <style>
@@ -64,20 +65,22 @@
       flex-shrink: 0;
     }
 
+    /* Triangles du haut : pointe vers le bas */
     .haut .triangle {
       clip-path: polygon(0 0, 100% 0, 50% 100%);
     }
 
+    /* Triangles du bas : pointe vers le haut */
     .bas .triangle {
       clip-path: polygon(50% 0, 100% 100%, 0 100%);
     }
 
     .brun {
-      background: #8b4d2e;
+      background-color: #8b4d2e;
     }
 
     .creme {
-      background: #fff0cf;
+      background-color: #fff0cf;
     }
 
     .barre {
@@ -121,13 +124,10 @@
   <script>
     const plateau = document.getElementById("plateau");
 
-    // La barre centrale occupe la 7e colonne.
-    // Les 12 triangles de chaque rangée sont répartis
-    // en deux groupes de 6.
-
     for (let ligne = 0; ligne < 2; ligne++) {
       for (let colonne = 0; colonne < 13; colonne++) {
 
+        // Colonne centrale réservée à la barre.
         if (colonne === 6) {
           if (ligne === 0) {
             const barre = document.createElement("div");
@@ -143,13 +143,17 @@
 
         const triangle = document.createElement("div");
 
-        // COULEURS INVERSÉES :
-        // premier triangle crème, puis brun, en alternance.
-        const indexTriangle = colonne < 6 ? colonne : colonne - 1;
-        const estCreme = (indexTriangle + ligne) % 2 === 0;
+        // Numérotation de 0 à 11 pour chaque rangée.
+        // En haut à gauche : crème.
+        // Puis brun, crème, brun, etc.
+        const numeroTriangle =
+          colonne < 6 ? colonne : colonne - 1;
+
+        const couleurCreme =
+          (numeroTriangle + ligne) % 2 === 0;
 
         triangle.className =
-          "triangle " + (estCreme ? "creme" : "brun");
+          "triangle " + (couleurCreme ? "creme" : "brun");
 
         casePlateau.appendChild(triangle);
         plateau.appendChild(casePlateau);
