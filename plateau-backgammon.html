@@ -4,40 +4,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mon Coach IA - Backgammon</title>
+  <title>Mon Coach de Jeux IA - Backgammon</title>
   <style>
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      padding: 20px;
+      padding: 16px;
       font-family: Arial, sans-serif;
       background: #f4efe5;
-      text-align: center;
       color: #29251f;
+      text-align: center;
     }
 
     h1 { color: #704323; }
 
     .plateau {
-      max-width: 700px;
-      margin: 25px auto;
-      padding: 18px;
+      max-width: 760px;
+      margin: 20px auto;
+      padding: 12px;
       background: #6b3d26;
-      border: 8px solid #3b2419;
-      border-radius: 12px;
+      border: 6px solid #3b2419;
+      border-radius: 10px;
       display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 5px;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 4px;
     }
 
     .case {
-      height: 190px;
-      background: #e7c99b;
+      height: 180px;
+      min-width: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      gap: 3px;
       overflow: hidden;
+      background: #e7c99b;
     }
 
     .case:nth-child(even) {
@@ -47,18 +48,24 @@
     .triangle {
       width: 0;
       height: 0;
-      border-left: 17px solid transparent;
-      border-right: 17px solid transparent;
-      border-top: 85px solid #704323;
+      border-left: 14px solid transparent;
+      border-right: 14px solid transparent;
+      border-top: 78px solid #704323;
+      flex-shrink: 0;
     }
 
-    .case:nth-child(even) .triangle {
+    /* Inversion des couleurs dans la moitié supérieure */
+    .case:nth-child(n+13) .triangle {
       border-top-color: #f0d7ad;
     }
 
+    .case:nth-child(n+13):nth-child(even) .triangle {
+      border-top-color: #704323;
+    }
+
     .pion {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
       border: 2px solid #333;
       flex-shrink: 0;
@@ -70,8 +77,8 @@
     .des {
       display: flex;
       justify-content: center;
-      gap: 15px;
-      margin: 20px;
+      gap: 12px;
+      margin: 18px;
     }
 
     .de {
@@ -100,19 +107,19 @@
     @media (max-width: 500px) {
       body { padding: 8px; }
       .plateau { padding: 5px; gap: 2px; border-width: 4px; }
-      .case { height: 125px; }
+      .case { height: 130px; }
       .triangle {
-        border-left-width: 9px;
-        border-right-width: 9px;
+        border-left-width: 8px;
+        border-right-width: 8px;
         border-top-width: 55px;
       }
       .pion { width: 13px; height: 13px; }
-      .de { width: 42px; height: 42px; }
+      .de { width: 45px; height: 45px; }
     }
   </style>
 </head>
 <body>
-  <h1>🎲 Mon Coach IA</h1>
+  <h1>🎲 Mon Coach de Jeux IA</h1>
   <h2>Le plateau de Backgammon</h2>
   <p>Découvre le plateau et prépare-toi à jouer !</p>
 
@@ -124,7 +131,6 @@
   </div>
 
   <button onclick="lancerDes()">🎲 Lancer les dés</button>
-
   <p id="message">Clique sur le bouton pour lancer les dés.</p>
 
   <p><a href="backgammon.html">📘 Revoir les règles</a></p>
@@ -175,3 +181,4 @@
   </script>
 </body>
 </html>
+
